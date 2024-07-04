@@ -96,26 +96,34 @@ function filterCategory(category) {
     });
 }
 
-function submitQuestion() {
-    const qaInput = document.getElementById('qa-input');
-    const qaContainer = document.getElementById('qa-container');
-    const userProfile = {
-        username: "말하는 감자",
-        email: "user@example.com",
-    };
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var reviewInput = document.getElementById('reviewInput').value;
+        if (reviewInput) {
+            var reviewList = document.getElementById('reviewList');
+            var newReview = document.createElement('div');
+            newReview.className = 'review';
+            newReview.innerHTML = `
+                <div class="logo-background">
+                    <img src="asset/Logo2 1.svg" alt="User Icon" class="user-icon">
+                </div>
+                <div class="review-content">
+                    <div class="review-username">New User</div>
+                    <div class="review-text">${reviewInput}</div>
+                </div>
+                <div class="review-actions">
+                    <button class="thumbs-up"><img src="asset/Thumbs Up.svg" alt="Thumbs Up"></button>
+                    <button class="thumbs-down"><img src="asset/Thumbs Down.svg" alt="Thumbs Down"></button>
+                </div>
+            `;
+            QList.appendChild(newReview);
+            document.getElementById('QInput').value = '';
 
-    if (qaInput.value.trim() !== '') {
-        const newQuestion = document.createElement('div');
-        newQuestion.classList.add('qa-item');
-        
-        const questionText = document.createElement('div');
-        questionText.classList.add('qa-question');
-        questionText.innerHTML = `<img src="asset/Reply.svg" alt="Reply Icon"><span>${userProfile.username}</span>${qaInput.value}`;
-        
-        newQuestion.appendChild(questionText);
-        newQuestion.style.borderBottom = '1px solid #e0e0e0';
-        qaContainer.appendChild(newQuestion);
-        
-        qaInput.value = '';
-    }
-}
+            // Add event listeners for the new review buttons
+            addQButtonListeners(newReview);
+        }
+    });
+});
+
+
