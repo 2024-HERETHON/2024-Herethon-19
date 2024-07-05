@@ -11,5 +11,4 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('pwverification/', pwverification_view, name='pwverification'),
     path('pwreset/', pwreset_view, name='pwreset'),
-    path('community/', community_view, name='community'),
 ]
