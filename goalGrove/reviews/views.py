@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse, HttpResponseBadRequest
-from .models import Review, ReviewLike, ReviewDislike
+from .models import Review
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 def create_review(request):
     if request.method == 'POST':
@@ -22,17 +23,14 @@ def delete_review(request, review_id):
     else:
         return render(request, 'reviews/error.html', {'message': 'Unauthorized'}, status=403)
 
-def like_review(request, review_id):
-    review = get_object_or_404(Review, id=review_id)
-    user = request.user  # 로그인된 사용자
-    ReviewLike.objects.get_or_create(user=user, review=review)
-    return redirect('reviews:get_reviews', review_id=review.id)
+@login_required
+def like(request, post_id):
+    post = get_object_or_404(Review, id=post_id)
+    if request.user in post.like_users.all():
+        Review.like_users.remove(request.user)
+    else:
+        Review.like_users.add(request.user)
 
-def dislike_review(request, review_id):
-    review = get_object_or_404(Review, id=review_id)
-    user = request.user  # 로그인된 사용자
-    ReviewDislike.objects.get_or_create(user=user, review=review)
-    return redirect('reviews:get_reviews', review_id=review.id)
 
 def get_reviews(request, review_id):
     review = get_object_or_404(Review, id=review_id)

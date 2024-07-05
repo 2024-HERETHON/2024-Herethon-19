@@ -7,4 +7,5 @@ app_name = 'reviews'
 
 urlpatterns = [
     path('delete/<int:review_id>/', delete_review, name='delete_review'),
+    path('like/<int:post_id>/', like, name="like_review"),
 ]

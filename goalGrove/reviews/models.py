@@ -13,14 +13,7 @@ class Review(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     image = models.ImageField(upload_to = upload_filepath, blank = True)
     content = models.TextField()
+    like_users = models.ManyToManyField('users.User', related_name='like_review')
 
     def __str__(self):
         return f"Review by {self.user.username}"
-
-class ReviewLike(models.Model):
-    review = models.ForeignKey(Review, related_name='likes', on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-
-class ReviewDislike(models.Model):
-    review = models.ForeignKey(Review, related_name='dislikes', on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
